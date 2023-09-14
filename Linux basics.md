@@ -12,3 +12,10 @@
 =================
 
 ## sudo systemctl start httpd
+
+===========================
+
+### Run docker commands without giving sudo
+you need to add your user (who has root privileges) to docker group. For this run following command:
+ sudo usermod -aG docker $USER
+Now, have the user logout then login again
