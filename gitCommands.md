@@ -1,9 +1,14 @@
 ## git reset command to revert the last change
-git reset --soft HEAD~1
+`git reset --soft HEAD~1`
 
 ## to show the branches graphically
-git log --graph --decorate
+`git log --graph --decorate`
 
+## To view all the branches- both local and remote 
+`git branch -a`
+
+## To edit the most recent commit message, you can use the --amend option with the git commit command. 
+`git commit --amend -m "new commit msg"`
 ## Fast Forward
 A "fast-forward merge" and a "no-fast-forward merge" are two different methods for integrating changes from one branch into another in Git. 
 A fast-forward merge occurs when Git is able to move the branch pointer of the target branch (usually the branch you're merging into) to directly 
