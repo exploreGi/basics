@@ -10,6 +10,7 @@
 
 `sudo yum install -y ansible`
 
+### Identify the package that provides ansible
 `sudo yum list ansible`
 
 `sudo yum remove -y ansible`
@@ -31,3 +32,16 @@ you need to add your user (who has root privileges) to docker group. For this ru
 
 `sudo usermod -aG docker $USER`
 Now, have the user logout then login again
+
+===========================================
+
+### Assign ip address of system to interface eth0
+ `ip addr add 192.168.10.1/24 dev etho0`
+
+### Show the ip addresses assigned to the interface
+`ip addr show`
+
+### Display the kernel routing table
+`route`
+
+### 
