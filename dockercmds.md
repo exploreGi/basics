@@ -14,4 +14,8 @@
 
 ctrl p ctrl q to come out of the container without killing it
 
+`docker run --rm -v /home/rajani/file2.txt:/data/file.txt pimage:nov8.2`
+
+
+
 
