@@ -16,6 +16,8 @@ ctrl p ctrl q to come out of the container without killing it
 
 `docker run --rm -v /home/rajani/file2.txt:/data/file.txt pimage:nov8.2`
 
+`docker run --rm -v /home/rajani/:/data/ pimage:nov8.2 python3.8 /mydir/printfile.py /data/docker-test/file1.txt`
+
 
 
 
