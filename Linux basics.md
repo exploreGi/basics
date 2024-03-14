@@ -44,4 +44,24 @@ Now, have the user logout then login again
 ### Display the kernel routing table
 `route`
 
-### 
+======================================================
+### shell script in debug mode 
+set -x
+
+### shell script to show error
+set -e
+
+### shell script to show error even when there is a pipeline
+set -o pipefail
+
+### to see file system disk space usage
+df -h
+
+### print amount of freeand used memory in system
+free -g
+
+### print no.of processing units available
+nproc
+
+### info about processes
+ps -ef | grep amazon | awk -F" " '{print$2}'
