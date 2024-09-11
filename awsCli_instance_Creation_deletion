@@ -1,0 +1,26 @@
+### Create a new key pair
+aws ec2 create-key-pair --key-name MyKeyPair --query 'KeyMaterial' --output text > MyKeyPair.pem
+
+### Create a security group
+aws ec2 create-security-group --group-name my-sg --description "My security group" --vpc-id vpc-1a2b3c4d
+
+### Add rules to security group
+aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 3389 --cidr 0.0.0.0/0
+(to launch windows instance)
+
+aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+(to launch linux instance)
+When you run an Amazon EC2 instance, you must enable rules in the security group to allow incoming 
+network traffic for your means of connecting to the image.
+
+### launch the instance
+aws ec2 run-instances --image-id ami-0e86e20dae9224db8 --count 1 --instance-type t2.micro --key-name MyKeyPair --security-groups my-sg
+
+### describe instance
+aws ec2 describe-instances
+
+### connect to the instance
+ssh -i "MyKeyPair.pem" ubuntu@ec2-18-212-31-191.compute-1.amazonaws.com
+
+### terminate instance
+aws ec2 terminate-instances --instance-ids i-0e5c619cb9e389ea0
