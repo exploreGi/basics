@@ -1,3 +1,5 @@
+### sudo -> substitute user do
+
 `rpm -aq`
 
 `rpm -aq openssh telnet ansible`
@@ -46,29 +48,44 @@ Now, have the user logout then login again
 
 ======================================================
 ### shell script in debug mode 
-set -x
+`set -x`
 
 ### shell script to show error
-set -e
+`set -e`
 
 ### shell script to show error even when there is a pipeline
-set -o pipefail
+`set -o pipefail`
 
 ### to see file system disk space usage
-df -h
+`df -h`
 
 ### print amount of freeand used memory in system
-free -g
+`free -g`
 
 ### print no.of processing units available (CPUs)
-nproc
+`nproc`
 
 ### print total no.of processess with all details,pid,memory usage, etc (this command helps to analyze the node status)
-top
+`top`
 
 ### info about processes, awk-> pattern scanning and processing language
-ps -ef | grep amazon | awk -F" " '{print$2}'
+`ps -ef | grep amazon | awk -F" " '{print$2}'`
 
 ### date
-date | echo "today is"
-the above command sends the output of the date(system defined command) to stdin and hence pipe output is null .
+`date | echo "today is"`
+this command sends the output of the date(system defined command) to stdin and hence pipe output is null.
+
+### curl -> tool for transferring date to or from the server
+`curl https://raw.githubusercontent.com/iam-veeramalla/sandbox/main/log/dummylog01122022.log | grep ERROR`
+
+### wget -> free utility for non-interactive download of files from web and saves them in current directory.cat and grep for errors.
+`wget https://raw.githubusercontent.com/iam-veeramalla/sandbox/main/log/dummylog01122022.log`
+
+### find -> search for files in a directory hierarchy
+`sudo find / -name pam`
+
+### signals send instructions on our behalf like trap 
+`trap "echo dont use ctrl-C" SIGINT`
+
+
+
