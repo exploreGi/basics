@@ -60,8 +60,11 @@ df -h
 ### print amount of freeand used memory in system
 free -g
 
-### print no.of processing units available
+### print no.of processing units available (CPUs)
 nproc
+
+### print total no.of processess with all details,pid,memory usage, etc (this command helps to analyze the node status)
+top
 
 ### info about processes
 ps -ef | grep amazon | awk -F" " '{print$2}'
