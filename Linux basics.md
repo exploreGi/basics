@@ -66,5 +66,9 @@ nproc
 ### print total no.of processess with all details,pid,memory usage, etc (this command helps to analyze the node status)
 top
 
-### info about processes
+### info about processes, awk-> pattern scanning and processing language
 ps -ef | grep amazon | awk -F" " '{print$2}'
+
+### date
+date | echo "today is"
+the above command sends the output of the date(system defined command) to stdin and hence pipe output is null .
