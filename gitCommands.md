@@ -34,3 +34,4 @@ Finally, it replays the removed commits on top of the updated branch.
 
 Rebase is generally discouraged for shared branches (like main or develop), 
 because it changes commit history, which can cause issues for other contributors.
+### The golden rule of git rebase is to never use it on public branches.
