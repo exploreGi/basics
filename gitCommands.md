@@ -35,3 +35,7 @@ Finally, it replays the removed commits on top of the updated branch.
 Rebase is generally discouraged for shared branches (like main or develop), 
 because it changes commit history, which can cause issues for other contributors.
 ### The golden rule of git rebase is to never use it on public branches.
+
+- git fetch retrieves changes from a remote repository without merging them.
+- git merge is used to integrate changes from one branch into your current branch, creating a new merge commit.
+- git pull combines the fetch and merge operations, updating your local branch with the latest changes from a remote branch.
