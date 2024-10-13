@@ -28,5 +28,8 @@ chmod 400 MyKeyPair.pem
 ### connect to the instance
 ssh -i "MyKeyPair.pem" ubuntu@ec2-18-212-31-191.compute-1.amazonaws.com
 
+### add inbound traffic port 8080
+aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 8080 --cidr 0.0.0.0/0
+
 ### terminate instance
 aws ec2 terminate-instances --instance-ids i-0e5c619cb9e389ea0
