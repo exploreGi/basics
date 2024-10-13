@@ -15,6 +15,9 @@ sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
 
+http://<public-ip>:8080/
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
 
 ## Step1
 Create a master Ec2 .Install java,jenkins.Configure edit inbound rules and add 8080,9007 in security groups.
