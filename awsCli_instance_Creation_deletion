@@ -33,3 +33,12 @@ aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --por
 
 ### terminate instance
 aws ec2 terminate-instances --instance-ids i-0e5c619cb9e389ea0
+
+### delete security-group
+aws ec2 delete-security-group --group-name "my-sg"
+
+### delete key-pair
+aws ec2 delete-key-pair --key-name "MyKeyPair"
+
+### check status of instance
+aws ec2 describe-instance-status --instance-id ""
