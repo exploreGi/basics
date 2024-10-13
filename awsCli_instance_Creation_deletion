@@ -19,8 +19,11 @@ network traffic for your means of connecting to the image.
 ### launch the instance
 aws ec2 run-instances --image-id ami-0e86e20dae9224db8 --count 1 --instance-type t2.micro --key-name MyKeyPair --security-groups my-sg
 
-### describe instance
+### describe instance to get the public ip
 aws ec2 describe-instances
+
+### change the permissions of MyKeyPair
+chmod 400 MyKeyPair.pem
 
 ### connect to the instance
 ssh -i "MyKeyPair.pem" ubuntu@ec2-18-212-31-191.compute-1.amazonaws.com
