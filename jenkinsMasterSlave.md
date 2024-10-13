@@ -26,13 +26,13 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
 - Restart Jenkins after the plugin is installed.
 
 ## Docker Slave Configuration
-`sudo apt-update`
-`sudo apt install docker.io`
+`sudo apt-update`\
+`sudo apt install docker.io`\
 
 ## Grant Jenkins user and Ubuntu user permission to docker deamon.
-`usermod -aG docker jenkins`
-`usermod -aG docker ubuntu`
-`systemctl restart docker`
+`usermod -aG docker jenkins`\
+`usermod -aG docker ubuntu`\
+`systemctl restart docker`\
 
 ## Retart Jenkins
 http://<ec2-instance-public-ip>:8080/restart
