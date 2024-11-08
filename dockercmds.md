@@ -18,6 +18,8 @@ ctrl p ctrl q to come out of the container without killing it
 
 `docker run --rm -v /home/rajani/:/data/ pimage:nov8.2 python3.8 /mydir/printfile.py /data/docker-test/file1.txt`
 
+`docker commit c3f279d17e0a  r1/testimage:version1`
+
 
 
 
