@@ -32,6 +32,8 @@
 - Build the executable: `go build`
   This command will create an executable file in the current directory, typically named main or the same as your main package name.
   - Run the exceutable: `./your-executable-name`
+- `GOOS=linux GOARCH=amd64 go build -o your-linux-executable` : this command will build for specific platform, linux
+- `go build -o` : used to build for multiple platforms
 
 ## Using Build Tools:
 - Makefiles: Create a Makefile to automate the build process.
