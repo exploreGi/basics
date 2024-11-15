@@ -32,8 +32,8 @@ grep -o "s" <<<"mississipi"  | wc -l
 no.of lines, no.of words, no.of characters(including new line /n) and file name
 
 ### Mount external hard drive on WSL Ubuntu
-➜  cd /
-➜  / ls /mnt
-➜  / sudo mkdir /mnt/d
-➜  / sudo mount -t drvfs D: /mnt/d
+➜  `cd /`\
+➜  / `ls /mnt`\
+➜  / `sudo mkdir /mnt/d`\
+➜  / `sudo mount -t drvfs D: /mnt/d`
 
