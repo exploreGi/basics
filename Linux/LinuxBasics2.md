@@ -36,4 +36,6 @@ no.of lines, no.of words, no.of characters(including new line /n) and file name
 ➜  / `ls /mnt`\
 ➜  / `sudo mkdir /mnt/d`\
 ➜  / `sudo mount -t drvfs D: /mnt/d`
+➜  / `sudo umount /mnt/d`
+
 
