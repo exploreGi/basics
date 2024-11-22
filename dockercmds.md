@@ -20,6 +20,8 @@ ctrl p ctrl q to come out of the container without killing it
 
 `docker commit c3f279d17e0a  r1/testimage:version1`
 
+`docker run --rm -p 9002:80 httpd`  # port mapping 9002 on host to 80 on container
+
 
 
 
