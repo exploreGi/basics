@@ -25,9 +25,16 @@ ctrl p ctrl q to come out of the container without killing it
 `uname -a` # displays the name of the operating system
 
 `docker build -t multiarchdemo:v1 .`
+
 `docker tag multiarchdemo:v1 ranniuser/multiarchdemo:v1`
+
 `docker builder ls` #to see builder instances available on your machine
-`docker buildx build --platform linux/amd64,linux/arm64 --push -t ranniuser/demo:v1 .` # builds the image for two linux platforms and pushes to docker hub
+
+`docker buildx create --name multiarchbuilder --platform linux/amd64,linux/arm64 --driver=docker-container --bootstrap --use`
+
+`docker builder ls`
+
+`docker buildx build --platform linux/amd64,linux/arm64 --push -t ranniuser/multiarchdemo:v1 .` # builds the image for two linux platforms and pushes to docker hub
 
 
 
