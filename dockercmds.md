@@ -22,6 +22,12 @@ ctrl p ctrl q to come out of the container without killing it
 
 `docker run --rm -p 9002:80 httpd`  # port mapping 9002 on host to 80 on container
 
+`uname -a` # displays the name of the operating system
+
+`docker builder ls` #to see builder instances available on your machine
+
+`docker buildx build --platform linux/amd64,linux/arm64 --push -t ranniuser/demo:v1 .` # builds the image for two linux platforms and pushes to docker hub
+
 
 
 
