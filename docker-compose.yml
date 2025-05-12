@@ -1,0 +1,10 @@
+version: '2.4'  # The last version of Docker Compose file format that directly supports mem_limit and cpus
+services:
+  display-md-files-service::
+    container_name: display-md-filecontents
+    image: ranniuser/flask-md-viewer:latest
+    ports:
+      - "5000:5000"
+    restart: always
+    mem_limit: 256M
+    cpus: 0.5
