@@ -62,7 +62,7 @@ jobs:
     - name: Pull the image from Docker hub and run container
       run: |
         docker pull ${{ secrets.DOCKER_USERNAME }}/flask-md-viewer:latest
-        $SSH_COMMAND "docker compose -f docker-compose.yml up -d --force-recreate"
+        docker compose -f docker-compose.yml up -d --force-recreate
         rm -f ec2.pem
           
   
