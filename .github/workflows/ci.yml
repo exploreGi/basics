@@ -71,7 +71,8 @@ jobs:
       run: |
         REPO_NAME="${GITHUB_REPOSITORY##*/}"
         echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
-        echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
+        echo "name=$repo-name" >> $GITHUB_OUTPUT
+        echo "@@@@@@@@$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" $  ${{ env.REPO_NAME }}
     
 
     - name: Build Docker image
