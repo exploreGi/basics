@@ -82,8 +82,8 @@ jobs:
   
         
       run: |
-        echo "*************************" $DKR_REPOSITORY
-        docker build -t $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG .
+        echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" $DKR_REPOSITORY
+        docker build -t $DKR_REPOSITORY:$IMAGE_TAG .
 
     - name: Run tests (if any)
       run: |
