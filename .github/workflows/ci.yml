@@ -79,8 +79,13 @@ jobs:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REPOSITORY: ${{ env.REPO_NAME }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
+
+        
         
       run: |
+        echo "DKR_REGISTRY=$DKR_REGISTRY"
+        echo "DKR_REPOSITORY=$DKR_REPOSITORY"
+        echo "IMAGE_TAG=$IMAGE_TAG"
         docker build -t $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG .
 
     - name: Run tests (if any)
