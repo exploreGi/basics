@@ -72,14 +72,14 @@ jobs:
         REPO_NAME="${GITHUB_REPOSITORY##*/}"
         echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
         echo "name=$repo-name" >> $GITHUB_OUTPUT
-        echo "@@@@@@@@$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" $  ${{ env.REPO_NAME }}
+        echo "@@@@@@@@$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" $REPO_NAME
     
 
     - name: Build Docker image
       env:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-        DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
+        DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/$REPO_NAME
   
         
       run: |
