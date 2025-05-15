@@ -91,7 +91,7 @@ jobs:
       env:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-        DKR_REPOSITORY: ${{ secrets.DOCKER_USRNAME }}/${{ env.REPO_NAME }}
+        DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
       run: |
         # Tag the image as latest
         echo "%%%%%%%%%%%%%%%%%%%%%%%%%% $DKR_REPOSITORY"
