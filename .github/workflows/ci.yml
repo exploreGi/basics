@@ -79,7 +79,8 @@ jobs:
       env:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-        DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/${{ REPO_NAME }}
+        
+        DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/${{ steps.repo-name }}
   
         
       run: |
