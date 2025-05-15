@@ -131,6 +131,7 @@ jobs:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
         DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
+        echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% $DKR_REGISTRY $DKR_REPOSITORY"
       run: |
         
         docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG
