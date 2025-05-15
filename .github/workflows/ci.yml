@@ -126,7 +126,11 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Pull the image from Docker hub and run container
+    - name: Pull the image from Docker hub and deploy in EC2
+      env:
+        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
+        DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
+        DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
       run: |
         
         docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG
