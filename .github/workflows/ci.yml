@@ -137,8 +137,8 @@ jobs:
         # SSH, SCP commands
         SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
         SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
-        mkdir /home/ubuntu/docker
-
+        $SSH_COMMAND mkdir -p /home/ubuntu/docker
+        
         # Copy docker-compose.yml to EC2 server
         $SCP_COMMAND docker-compose.yml $EC2_USER@$EC2_HOST:/home/ubuntu/docker/
 
