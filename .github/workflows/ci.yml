@@ -136,7 +136,7 @@ jobs:
         $SSH_COMMAND "mkdir -p /home/ubuntu/docker"
         
         # Copy docker-compose.yml to EC2 server
-        $SCP_COMMAND "docker-compose.yml $EC2_USER@$EC2_HOST:/home/ubuntu/docker/""
+        $SCP_COMMAND "docker-compose.yml $EC2_USER@$EC2_HOST:/home/ubuntu/docker/"
 
         $SSH_COMMAND "cd /home/ubuntu/docker/ && docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG && docker compose -f docker-compose.yml up -d --force-recreate"
           
