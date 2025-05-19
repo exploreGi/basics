@@ -103,20 +103,13 @@ jobs:
         # Push the latest tag
         docker push $DKR_REPOSITORY:latest
 
-    - name: Connect to EC2 
+    - name: Connect to EC2
       env:
         EC2_PEM_KEY: ${{ secrets.EC2_PEM_KEY }}
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
-        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
-        DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-        DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
-
       run: |
         # Save PEM key to file and set permissions
         echo "$EC2_PEM_KEY" > ec2.pem
         chmod 400 ec2.pem
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -132,15 +125,18 @@ jobs:
         IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
         DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
+        EC2_PEM_KEY: ${{ secrets.EC2_PEM_KEY }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
         
       run: |
         # SSH, SCP commands
         SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
         SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
-        $SSH_COMMAND mkdir -p /home/ubuntu/docker
+        $SSH_COMMAND "mkdir -p /home/ubuntu/docker"
         
         # Copy docker-compose.yml to EC2 server
-        $SCP_COMMAND docker-compose.yml $EC2_USER@$EC2_HOST:/home/ubuntu/docker/
+        $SCP_COMMAND "docker-compose.yml $EC2_USER@$EC2_HOST:/home/ubuntu/docker/""
 
         $SSH_COMMAND "cd /home/ubuntu/docker/ && docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG && docker compose -f docker-compose.yml up -d --force-recreate"
           
