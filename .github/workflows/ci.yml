@@ -153,7 +153,7 @@ jobs:
           fi
           
           # Install Docker Compose if not installed
-          if ! command -v docker compose &> /dev/null; then
+          if ! command -v docker-compose &> /dev/null; then
             DOCKER_CLI_PLUGINS_DIR=~/.docker/cli-plugins
             mkdir -p $DOCKER_CLI_PLUGINS_DIR
             curl -SL https://github.com/docker/compose/releases/download/v2.4.0/docker-compose-linux-x86_64 \
@@ -167,7 +167,7 @@ jobs:
           export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
           cd /home/ubuntu/docker
           sudo docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG
-          sudo docker compose -f docker-compose.yml up -d --force-recreate
+          sudo docker-compose -f docker-compose.yml up -d --force-recreate
         EOF
   
         # Cleanup the PEM file
