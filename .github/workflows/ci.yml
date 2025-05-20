@@ -178,7 +178,7 @@ jobs:
           export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
           cd /home/ubuntu/docker
           sudo docker pull $DKR_REPOSITORY:$IMAGE_TAG
-          sudo docker compose --file docker-compose.yml up -d --force-recreate
+          sudo docker compose up -d --force-recreate
         EOF
   
         # Cleanup the PEM file
