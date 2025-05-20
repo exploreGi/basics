@@ -13,6 +13,8 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install flask requests
+
 COPY displayMDFilenames.py .
 
 ENV FLASK_APP=displayMDFilenames.py
