@@ -142,7 +142,6 @@ jobs:
 
         # SSH into EC2 and install Docker + deploy the container
         $SSH_COMMAND << 'EOF'
-          echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& INSIDE EOF"
           # Install Docker if not installed
           if ! command -v docker &> /dev/null; then
             echo "Installing Docker..."
@@ -152,7 +151,7 @@ jobs:
             sudo systemctl enable docker
             sudo usermod -aG docker $EC2_USER         
           fi
-          echo "%%%%%%%%%%%%%%%%%%%%%%%% DockerVERISON" sudo docker version 
+          
           # Install Docker Compose if not installed
           if ! docker compose version &> /dev/null; then
             echo "Installing Docker Compose v2..."
@@ -163,7 +162,6 @@ jobs:
             chmod +x $DOCKER_CLI_PLUGINS_DIR/docker-compose
             export PATH="$HOME/.docker/cli-plugins:$PATH"
           fi
-          echo "%%%%%%%%%%%%%%%%%%%%%%%%DOCKER COMPOSE VERSION:" sudo docker compose version
           # Deploy the image
           #export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
           #export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
