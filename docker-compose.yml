@@ -5,6 +5,6 @@ services:
     image: ranniuser/basics:latest
     ports:
       - "80:5000"
-    restart: always
+    #restart: always
     mem_limit: 256M
     cpus: 0.5
