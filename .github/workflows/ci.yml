@@ -164,7 +164,11 @@ jobs:
           fi
           
           # Verify installation
-          docker compose version
+          docker compose version || echo "Docker Compose plugin not available"
+
+          # 5. Confirm where docker compose is coming from
+          which docker-compose || echo "docker-compose not found"
+          which docker compose || echo "docker compose not found"
           # DEPLOY IMAGE
 
           # Docker login using credentials passed via environment
