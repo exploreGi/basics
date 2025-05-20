@@ -164,9 +164,12 @@ jobs:
           fi
 
           # Deploy the image
+          export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
+          export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
+          export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
           cd /home/ubuntu/docker
-          docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG
-          docker compose -f docker-compose.yml up -d --force-recreate
+          sudo docker pull $DKR_REGISTRY/$DKR_REPOSITORY:$IMAGE_TAG
+          sudo docker compose -f docker-compose.yml up -d --force-recreate
         EOF  
   
         # Cleanup the PEM file
