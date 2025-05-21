@@ -68,7 +68,7 @@ jobs:
           
           cd /home/ubuntu/docker
           sudo docker pull $DKR_REPOSITORY:latest
-          sudo docker compose up -f docker-compose.yml -d --force-recreate
+          sudo docker compose up -d --force-recreate
           EOF
   
           # Cleanup the PEM file
