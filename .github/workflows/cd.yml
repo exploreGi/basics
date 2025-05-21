@@ -11,7 +11,7 @@ jobs:
     steps: 
       - name: Checkout repo
         uses: actions/checkout@v3
-        
+
       - name: Extract repository name
         id: repo-name
         run: |
@@ -63,9 +63,11 @@ jobs:
           echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
           export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
-          export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
+          #export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
+
+          
           cd /home/ubuntu/docker
-          sudo docker pull $DKR_REPOSITORY:$IMAGE_TAG
+          sudo docker pull $DKR_REPOSITORY:latest
           sudo docker compose up -f docker-compose.yml -d --force-recreate
           EOF
   
