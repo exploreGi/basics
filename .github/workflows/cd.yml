@@ -1,14 +1,27 @@
 name: CD
 
 on:
-  #push:
-    #branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["build"]
+    types:
+        completed
 jobs:
-  install-docker:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps: 
+      - name: Download artifact image tag
+        uses: actions/download-artifact@v4
+        with:
+          name: image_tag
+      
+      - name: Read tag from artifact
+        id: read_tag
+        run: |
+          IMAGE_TAG=$(cat image_tag.txt)
+          echo "IMAGE_TAG=$IMAGE_TAG"
+          echo "tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -26,7 +39,7 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
           DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
-      
+          IMAGE_TAG: ${{ steps.read_tag.outputs.tag }}
      
         run: |
           # Save PEM key to file and set permissions
@@ -42,20 +55,7 @@ jobs:
           set -e
           # Install Docker if not installed
           if ! command -v docker &> /dev/null; then
-            echo "Installing Docker..."
-            sudo apt-get update
-            sudo apt-get install ca-certificates curl
-            sudo install -m 0755 -d /etc/apt/keyrings
-            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-            sudo chmod a+r /etc/apt/keyrings/docker.asc
-            echo \
-              "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-               $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-            sudo apt-get update
-            sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-            #sudo systemctl start docker
-            #sudo systemctl enable docker
+            sudo sh installDocker.sh
             sudo usermod -aG docker $EC2_USER   
             sudo newgrp docker  
           fi
@@ -63,11 +63,11 @@ jobs:
           echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
           export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
-          #export IMAGE_TAG=${{ steps.next_version.outputs.tag }}
+          export IMAGE_TAG=${{ steps.read_tag.outputs.tag }}
 
           
           cd /home/ubuntu/docker
-          sudo docker pull $DKR_REPOSITORY:latest
+          sudo docker pull $DKR_REPOSITORY:IMAGE_TAG
           sudo docker compose up -d --force-recreate
           EOF
   
