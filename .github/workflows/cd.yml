@@ -2,7 +2,7 @@ name: CD
 
 on:
   workflow_run:
-    workflows: ["build"]
+    workflows: ["CI"]
     types:
         - completed
 jobs:
@@ -37,38 +37,72 @@ jobs:
           EC2_PEM_KEY: ${{ secrets.EC2_PEM_KEY }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
-          DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-          DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
-          IMAGE_TAG: ${{ steps.read_tag.outputs.tag }}
+          # DKR_REGISTRY, DKR_REPOSITORY, IMAGE_TAG are now set in the run script's SSH command
      
         run: |
           # Save PEM key to file and set permissions
           echo "$EC2_PEM_KEY" > ec2.pem
           chmod 400 ec2.pem
-          SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
+
+          # Define DKR_REPOSITORY and IMAGE_TAG for use in SSH command and heredoc
+          REPO_NAME_VAR="${GITHUB_REPOSITORY##*/}" # Store in a temporary shell variable
+          DKR_REPOSITORY_VAR="${{ secrets.DOCKER_USERNAME }}/$REPO_NAME_VAR"
+          IMAGE_TAG_VAR="${{ steps.read_tag.outputs.tag }}"
+
+          # Construct SSH_COMMAND to pass environment variables to the EC2 instance
+          # Ensure proper quoting for variables, especially secrets.
+          # Note: Using $USER inside the heredoc for usermod. $EC2_USER is from the runner's context.
+          # For EC2 standard Ubuntu AMIs, 'ubuntu' is the default user.
+          SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST \
+            DKR_REPOSITORY=\"$DKR_REPOSITORY_VAR\" \
+            IMAGE_TAG=\"$IMAGE_TAG_VAR\" \
+            DOCKER_USERNAME_SECRET=\"${{ secrets.DOCKER_USERNAME }}\" \
+            DOCKER_PASSWORD_SECRET=\"${{ secrets.DOCKER_PASSWORD }}\""
+
           SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
+          
           $SSH_COMMAND "mkdir -p /home/ubuntu/docker"
           # Copy docker-compose.yml to EC2 server
           $SCP_COMMAND docker-compose.yml "$EC2_USER@$EC2_HOST:/home/ubuntu/docker/"
+          
           # SSH into EC2 and install Docker + deploy the container
           $SSH_COMMAND << 'EOF'
           set -e
           # Install Docker if not installed
           if ! command -v docker &> /dev/null; then
-            sudo sh installDocker.sh
-            sudo usermod -aG docker $EC2_USER   
-            sudo newgrp docker  
+            echo "Docker not found. Installing Docker..."
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+            # Add the current user ($USER, which on EC2 ubuntu instance is typically 'ubuntu') to the docker group.
+            # $EC2_USER is the variable from GitHub Actions context, which should also be 'ubuntu'.
+            # Using 'ubuntu' directly is safer if $USER might not be set as expected in this non-interactive script part.
+            sudo usermod -aG docker ubuntu 
+            echo "Docker installed. User 'ubuntu' added to docker group. A re-login or new session might be needed for non-sudo docker commands."
+            echo "All docker commands in this script will use 'sudo'."
+          else
+            echo "Docker is already installed."
           fi
-          # Docker login using credentials passed via environment
-          echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
-          export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
-          export IMAGE_TAG=${{ steps.read_tag.outputs.tag }}
-
           
+          # Docker login using credentials passed via environment variables from SSH_COMMAND
+          echo "Logging into Docker registry..."
+          # Using sudo for docker login
+          echo "$DOCKER_PASSWORD_SECRET" | sudo docker login -u "$DOCKER_USERNAME_SECRET" --password-stdin
+          
+          # DKR_REPOSITORY and IMAGE_TAG are now directly available as environment variables
+          # from the SSH_COMMAND. No need to export them again here.
+          
+          echo "Changing directory to /home/ubuntu/docker"
           cd /home/ubuntu/docker
-          sudo docker pull $DKR_REPOSITORY:IMAGE_TAG
-          sudo docker compose up -d --force-recreate
+          
+          echo "Pulling image: $DKR_REPOSITORY:$IMAGE_TAG"
+          # Use quotes around variables to prevent issues with special characters.
+          sudo docker pull "$DKR_REPOSITORY:$IMAGE_TAG"
+          
+          echo "Running docker-compose up"
+          # Ensure docker-compose.yml is configured to use DKR_REPOSITORY and IMAGE_TAG
+          # (e.g., image: ${DKR_REPOSITORY}:${IMAGE_TAG} or image: $DKR_REPOSITORY:$IMAGE_TAG)
+          # Changed 'docker compose' to 'docker-compose' to match the original script and user prompt's example.
+          sudo docker-compose up -d --force-recreate
           EOF
   
           # Cleanup the PEM file
