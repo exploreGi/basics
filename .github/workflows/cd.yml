@@ -14,6 +14,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: image_tag
+          run-id: ${{ github.event.workflow_run.id }}
       
       - name: Read tag from artifact
         id: read_tag
