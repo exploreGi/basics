@@ -62,24 +62,24 @@ jobs:
           $SCP_COMMAND installDocker.sh "$EC2_USER@$EC2_HOST:/home/ubuntu/docker/"
           # SSH into EC2 and install Docker + deploy the container
           $SSH_COMMAND << 'EOF'
-          set -e
-          # Install Docker if not installed
-          if ! command -v docker &> /dev/null; then
-            sudo chmod +x /home/ubuntu/installDocker.sh
-            sudo sh /home/ubuntu/installDocker.sh
-            sudo usermod -aG docker $EC2_USER   
-            sudo newgrp docker  
-          fi
-          # Docker login using credentials passed via environment
-          echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
-          export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
-          export IMAGE-TAG=${{ steps.read_tag.outputs.tag }}
+            set -e
+            # Install Docker if not installed
+            if ! command -v docker &> /dev/null; then
+              sudo chmod +x /home/ubuntu/installDocker.sh
+              sudo sh /home/ubuntu/installDocker.sh
+              sudo usermod -aG docker $EC2_USER   
+              sudo newgrp docker  
+            fi
+            # Docker login using credentials passed via environment
+            echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+            export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
+            export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
+            export IMAGE-TAG=${{ steps.read_tag.outputs.tag }}
 
           
-          cd /home/ubuntu/docker
-          sudo docker pull $DKR_REPOSITORY:IMAGE-TAG
-          sudo docker compose up -d --force-recreate
+            cd /home/ubuntu/docker
+            sudo docker pull $DKR_REPOSITORY:IMAGE-TAG
+            sudo docker compose up -d --force-recreate
           EOF
   
           # Cleanup the PEM file
