@@ -109,10 +109,10 @@ jobs:
       run: |
         # Tag the image as latest
         echo "%%%%%%%%%%%%%%%%%%%%%%%%%% $DKR_REPOSITORY"
-        docker tag $DKR_REPOSITORY:$IMAGE-TAG $DKR_REPOSITORY:latest
+        docker tag $DKR_REPOSITORY:$IMAGE_TAG $DKR_REPOSITORY:latest
 
         # Push the specific version tag
-        docker push $DKR_REPOSITORY:$IMAGE-TAG
+        docker push $DKR_REPOSITORY:$IMAGE_TAG
 
         # Push the latest tag
         docker push $DKR_REPOSITORY:latest  
