@@ -9,7 +9,9 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    steps: 
+    permissions:
+      actions: read
+    steps:  
       - name: Download artifact image tag
         uses: actions/download-artifact@v4
         with:
