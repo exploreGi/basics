@@ -1,9 +1,10 @@
 name: CD
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
+    #workflow_dispatch:
+    workflow_run:
+      workflows: ["CI"]
+      types:
         - completed
 jobs:
   deploy:
@@ -18,7 +19,7 @@ jobs:
           name: image-tag
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.ACCESS_TOKEN }} 
-          repository: "${GITHUB_REPOSITORY##*/}"
+          #repository: 
 
       - name: Test artifact download
         run: ls -R
