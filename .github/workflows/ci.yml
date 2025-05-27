@@ -89,13 +89,13 @@ jobs:
 
     - name: Build Docker image
       env:
-        IMAGE-TAG: ${{ steps.next_version.outputs.tag }}
+        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}        
         DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
   
         
       run: |
-        docker build -t $DKR_REPOSITORY:$IMAGE-TAG .
+        docker build -t $DKR_REPOSITORY:$IMAGE_TAG .
 
     - name: Run tests (if any)
       run: |
@@ -103,7 +103,7 @@ jobs:
 
     - name: Push Docker image
       env:
-        IMAGE-TAG: ${{ steps.next_version.outputs.tag }}
+        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
         DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
       run: |
