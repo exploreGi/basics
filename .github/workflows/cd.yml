@@ -27,8 +27,7 @@ jobs:
       - name: Read tag from artifact
         id: read_tag
         run: |
-          IMAGE-TAG=$(cat image-tag.txt)
-          echo "IMAGE-TAG=$IMAGE-TAG"
+          IMAGE-TAG=$(cat image-tag.txt)        
           echo "tag=$IMAGE-TAG" >> $GITHUB_OUTPUT
 
       - name: Checkout repo
