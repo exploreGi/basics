@@ -42,13 +42,17 @@ jobs:
         echo "Next version: $NEXT_TAG"
 
     - name: Save IMAGE_TAG as artifact
-      run: echo "${{ steps.next_version.outputs.tag }}" > image_tag.txt
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: echo "${{ steps.next_version.outputs.tag }}" > image-tag.txt
+    
 
     - name: Upload IMAGE_TAG
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v4
       with:
-        name: image_tag
-        path: image_tag.txt
+        name: image-tag
+        path: image-tag.txt
+      
 
 ################################################################
 ###                     CREATE RELEASE                       ###
@@ -56,6 +60,7 @@ jobs:
 ################################################################
 
     - name: Create Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       id: create_release
       uses: actions/create-release@v1
       env:
