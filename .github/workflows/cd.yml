@@ -58,6 +58,8 @@ jobs:
           $SSH_COMMAND "mkdir -p /home/ubuntu/docker"
           # Copy docker-compose.yml to EC2 server
           $SCP_COMMAND docker-compose.yml "$EC2_USER@$EC2_HOST:/home/ubuntu/docker/"
+          # Copy installDocker.sh to EC2 server
+          $SCP_COMMAND installDocker.sh "$EC2_USER@$EC2_HOST:/home/ubuntu/docker/"
           # SSH into EC2 and install Docker + deploy the container
           $SSH_COMMAND << 'EOF'
           set -e
