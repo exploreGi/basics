@@ -41,12 +41,12 @@ jobs:
         echo "tag=$NEXT_TAG" >> $GITHUB_OUTPUT
         echo "Next version: $NEXT_TAG"
 
-    - name: Save IMAGE_TAG as artifact
+    - name: Save IMAGE-TAG as artifact
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: echo "${{ steps.next_version.outputs.tag }}" > image-tag.txt
     
 
-    - name: Upload IMAGE_TAG
+    - name: Upload IMAGE-TAG
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v4
       with:
@@ -89,13 +89,13 @@ jobs:
 
     - name: Build Docker image
       env:
-        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
+        IMAGE-TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}        
         DKR_REPOSITORY:  ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
   
         
       run: |
-        docker build -t $DKR_REPOSITORY:$IMAGE_TAG .
+        docker build -t $DKR_REPOSITORY:$IMAGE-TAG .
 
     - name: Run tests (if any)
       run: |
@@ -103,16 +103,16 @@ jobs:
 
     - name: Push Docker image
       env:
-        IMAGE_TAG: ${{ steps.next_version.outputs.tag }}
+        IMAGE-TAG: ${{ steps.next_version.outputs.tag }}
         DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
         DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
       run: |
         # Tag the image as latest
         echo "%%%%%%%%%%%%%%%%%%%%%%%%%% $DKR_REPOSITORY"
-        docker tag $DKR_REPOSITORY:$IMAGE_TAG $DKR_REPOSITORY:latest
+        docker tag $DKR_REPOSITORY:$IMAGE-TAG $DKR_REPOSITORY:latest
 
         # Push the specific version tag
-        docker push $DKR_REPOSITORY:$IMAGE_TAG
+        docker push $DKR_REPOSITORY:$IMAGE-TAG
 
         # Push the latest tag
         docker push $DKR_REPOSITORY:latest  
