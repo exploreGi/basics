@@ -17,6 +17,9 @@ jobs:
         with:
           name: image-tag
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.ACCESS_TOKEN }} 
+          repository: "${GITHUB_REPOSITORY##*/}"
+
       - name: Test artifact download
         run: ls -R
       
