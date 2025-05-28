@@ -11,7 +11,8 @@ echo \
    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl start docker
+sudo systemctl enable docker.service
 sudo groupadd docker
 sudo usermod -aG docker $USER 
 sudo newgrp docker
-sudo systemctl start docker
