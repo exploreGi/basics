@@ -66,8 +66,9 @@ jobs:
             set -e
             # Install Docker if not installed
             if ! command -v docker &> /dev/null; then
-              sudo chmod +x /home/$EC2_USER/docker/installDocker.sh
-              sudo sh /home/$EC2_USER/docker/installDocker.sh
+              sudo chmod +x /home/$USER/docker/installDocker.sh
+              sudo sh /home/$USER/docker/installDocker.sh
+
                 
             fi
             # Docker login using credentials passed via environment
