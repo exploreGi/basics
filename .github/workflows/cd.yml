@@ -67,6 +67,7 @@ jobs:
             if ! command -v docker &> /dev/null; then
               sudo chmod +x /home/ubuntu/docker/installDocker.sh
               sudo sh /home/ubuntu/docker/installDocker.sh
+              sudo groupadd docker
               sudo usermod -aG docker $EC2_USER   
               sudo newgrp docker  
             fi
