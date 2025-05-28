@@ -65,8 +65,8 @@ jobs:
             set -e
             # Install Docker if not installed
             if ! command -v docker &> /dev/null; then
-              sudo chmod +x /home/ubuntu/installDocker.sh
-              sudo sh /home/ubuntu/installDocker.sh
+              sudo chmod +x /home/ubuntu/docker/installDocker.sh
+              sudo sh /home/ubuntu/docker/installDocker.sh
               sudo usermod -aG docker $EC2_USER   
               sudo newgrp docker  
             fi
