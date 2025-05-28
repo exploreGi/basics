@@ -53,6 +53,7 @@ jobs:
           # Save PEM key to file and set permissions
           echo "$EC2_PEM_KEY" > ec2.pem
           chmod 400 ec2.pem
+          export EC2_USER=${{ secrets.EC2_USER }}
           SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
           SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
           $SSH_COMMAND "mkdir -p /home/$EC2_USER/docker"
