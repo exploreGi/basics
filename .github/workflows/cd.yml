@@ -47,7 +47,7 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
           DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
-          IMAGE-TAG: ${{ steps.read_tag.outputs.tag }}
+          IMAGE_TAG: ${{ steps.read_tag.outputs.tag }}
      
         run: |
           # Save PEM key to file and set permissions
