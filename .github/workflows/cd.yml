@@ -79,7 +79,7 @@ jobs:
 
           
             cd /home/ubuntu/docker
-            sudo docker pull $DKR_REPOSITORY:IMAGE_TAG
+            sudo docker pull $DKR_REPOSITORY:$IMAGE_TAG
             sudo docker compose up -d --force-recreate
           EOF
   
