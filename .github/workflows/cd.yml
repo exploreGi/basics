@@ -55,7 +55,7 @@ jobs:
           chmod 400 ec2.pem
           SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
           SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
-          $SSH_COMMAND "mkdir -p /home/$USER/docker"
+          $SSH_COMMAND "mkdir -p /home/$EC2_USER/docker"
           # Copy docker-compose.yml to EC2 server
           $SCP_COMMAND docker-compose.yml "$EC2_USER@$EC2_HOST:/home/$EC2_USER/docker/"
           # Copy installDocker.sh to EC2 server
