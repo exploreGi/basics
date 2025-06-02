@@ -19,7 +19,6 @@ jobs:
           name: image-tag
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.ACCESS_TOKEN }} 
-          #repository: 
 
       - name: Test artifact download
         run: ls -R
@@ -40,50 +39,52 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
           echo "name=$repo-name" >> $GITHUB_OUTPUT 
 
-      - name: Connect to EC2
-        env:
-          EC2_PEM_KEY: ${{ secrets.EC2_PEM_KEY }}
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USER: ${{ secrets.EC2_USER }}
-          DKR_REGISTRY: ${{ secrets.DOCKER_USERNAME }}
-          DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
-          IMAGE_TAG: ${{ steps.read_tag.outputs.tag }}
-     
-        run: |
-          # Save PEM key to file and set permissions
-          echo "$EC2_PEM_KEY" > ec2.pem
-          chmod 400 ec2.pem
-          #export EC2_USER=${{ secrets.EC2_USER }}
-          SSH_COMMAND="ssh -i ec2.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST"
-          SCP_COMMAND="scp -i ec2.pem -o StrictHostKeyChecking=no"
-          $SSH_COMMAND "mkdir -p /home/$EC2_USER/docker"
-          # Copy docker-compose.yml to EC2 server
-          $SCP_COMMAND docker-compose.yml "$EC2_USER@$EC2_HOST:/home/$EC2_USER/docker/"
-          # Copy installDocker.sh to EC2 server
-          $SCP_COMMAND installDocker.sh "$EC2_USER@$EC2_HOST:/home/$EC2_USER/docker/"
-          # SSH into EC2 and install Docker + deploy the container
-          $SSH_COMMAND << 'EOF'
-            set -e
-            # Install Docker if not installed
-            if ! command -v docker &> /dev/null; then
-              sudo chmod +x /home/$USER/docker/installDocker.sh
-              sudo sh /home/$USER/docker/installDocker.sh         
-            fi
-            # Docker login using credentials passed via environment
-            echo "${{secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-            export DKR_REGISTRY=${{ secrets.DOCKER_USERNAME }}
-            export DKR_REPOSITORY=$DKR_REGISTRY/${{ env.REPO_NAME }}
-            export IMAGE_TAG=${{ steps.read_tag.outputs.tag }}
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PEM_KEY }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "/home/ubuntu/docker"
 
-          
+      - name: Deploy to EC2 using SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PEM_KEY }}
+          port: 22
+          script: |
+            set -e
             cd /home/ubuntu/docker
-            sudo docker pull $DKR_REPOSITORY:$IMAGE_TAG
-            sudo docker compose up -d --force-recreate
-          EOF
-  
-          # Cleanup the PEM file
-          rm -f ec2.pem
-        
+            if ! command -v docker &> /dev/null; then
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+              sudo usermod -aG docker ${{ secrets.EC2_USER }}
+            fi
+             # Docker login
+            echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+            # Define image variables
+            # REPO_NAME is set in GITHUB_ENV by 'Extract repository name' step
+            # tag is set as an output by 'Read tag from artifact' step
+            DKR_REPOSITORY_VAR="${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}"
+            IMAGE_TAG_VAR="${{ steps.read_tag.outputs.tag }}"
+
+            echo "Pulling image: $DKR_REPOSITORY_VAR:$IMAGE_TAG_VAR"
+            sudo docker pull "$DKR_REPOSITORY_VAR:$IMAGE_TAG_VAR"
             
+            echo "Running docker-compose up"
+            # Export variables for docker-compose
+            export DKR_REPOSITORY="$DKR_REPOSITORY_VAR"
+            export IMAGE_TAG="$IMAGE_TAG_VAR"
+            sudo docker-compose up -d --force-recreate
+        
+
+
+  
+                     
 
 

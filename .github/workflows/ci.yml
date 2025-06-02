@@ -108,7 +108,7 @@ jobs:
         DKR_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}
       run: |
         # Tag the image as latest
-        echo "%%%%%%%%%%%%%%%%%%%%%%%%%% $DKR_REPOSITORY"
+        echo "%%%%%%%%%% $DKR_REPOSITORY %%%%%%%%%%%%"
         docker tag $DKR_REPOSITORY:$IMAGE_TAG $DKR_REPOSITORY:latest
 
         # Push the specific version tag
