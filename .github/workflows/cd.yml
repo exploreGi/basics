@@ -49,7 +49,7 @@ jobs:
           DKR_REPOSITORY_VAR="${{ secrets.DOCKER_USERNAME }}/$REPO_NAME_VAR"
           IMAGE_TAG_VAR="${{ steps.read_tag.outputs.tag }}"
 
-          # Construct SSH_COMMAND to pass environment variables to the EC2 instance
+          # Construct SSH_COMMAND to pass environment variables to the AWS EC2 instance
           # Ensure proper quoting for variables, especially secrets.
           # Note: Using $USER inside the heredoc for usermod. $EC2_USER is from the runner's context.
           # For EC2 standard Ubuntu AMIs, 'ubuntu' is the default user.
