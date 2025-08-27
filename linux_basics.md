@@ -87,5 +87,9 @@ this command sends the output of the date(system defined command) to stdin and h
 ### signals send instructions on our behalf like trap 
 `trap "echo dont use ctrl-C" SIGINT`
 
+### Create a user named javed with a non-interactive shell on App Server 1.
+sudo useradd -s /sbin/nologin javed
+sudo grep javed /etc/passwd
+
 
 
